@@ -6,35 +6,40 @@
 struct LinkNode
 {
     int vertexIndex;
-    int edgeWeight;
+    int bondID;
     struct LinkNode *next;
 };
 typedef struct LinkNode SllNode;
 
 typedef struct AdjacencyList{
+
     // array of SllNodes
     SllNode* arr;
     // number of nodes in the arr
     int nodeCount;
     // total capacity of array
     int capacity;
-    // type of graph : 0 for directed and 1 for undirected
-    int graphType;
+    // total edges in graph
+    int bondCount;
+    // total capacity of bonds
+    int bondCapacity;
+
 } AdjacencyList;    
 
 // function declarations of linked list functions
-SllNode* addNodeBegin(SllNode* head, int vi, int wt);
-SllNode* addSllNodeAfterGivenNode(SllNode* head, int vi, int wt);
-SllNode* createSllNode(int vi, int wt);
+SllNode* addNodeBegin(SllNode* head, int vi, int bi);
+SllNode* createSllNode(int vi, int bi);
+void deleteLL(SllNode* head);
   
 // type = 1 for undirected graphs and 0 for directed graphs
-AdjacencyList* createNewAdjacencyList(int numVertices, int type){
+AdjacencyList* createNewAdjacencyList(int numVertices){
     AdjacencyList* graph = (AdjacencyList *)malloc(sizeof(AdjacencyList));
 
     graph->arr = (SllNode *)malloc(sizeof(SllNode) * (numVertices + SPARE));
     graph->capacity = numVertices + SPARE;
     graph->nodeCount = numVertices;
-    graph->graphType = type;
+    graph->bondCount = 0;
+    graph->bondCapacity = SPARE;
 
     // setting the next of all the nodes to NULL
     for(int i=0; i < graph->capacity; i++){
@@ -45,20 +50,27 @@ AdjacencyList* createNewAdjacencyList(int numVertices, int type){
     return graph;
 }    
 
-void addEdgeAL(AdjacencyList* graph, int v1, int v2, int weight){
+int addEdgeAL(AdjacencyList* graph, int v1, int v2){
     if(v1 >= graph->nodeCount || v2 >= graph->nodeCount || v1 == v2){
-        return;
+        return -1;
     }
-    graph->arr[v1].next = addNodeBegin(graph->arr[v1].next, v2, weight);
-    if(graph->graphType){
-        graph->arr[v2].next = addNodeBegin(graph->arr[v2].next, v1, weight);
-    }
+    graph->arr[v1].next = addNodeBegin(graph->arr[v1].next, v2, graph->bondCount);
+
+    graph->arr[v2].next = addNodeBegin(graph->arr[v2].next, v1, graph->bondCount);
+
+    return graph->bondCount++;
 }
 
 int addVertexAL(AdjacencyList* graph){
     if(graph->nodeCount == graph->capacity){
         graph->capacity += SPARE;
         SllNode* newArr = (SllNode *)realloc(graph->arr, graph->capacity * sizeof(SllNode));
+
+        if(newArr == NULL){
+            printf("\nMemory Allocation Failed!");
+            exit(1);
+        }
+
         graph->arr = newArr;
     }
 
@@ -74,36 +86,50 @@ void printAdjacencyList(AdjacencyList* graph){
         printf("\n%3d-> ", i);
         temp = graph->arr[i].next;
         while(temp != NULL){
-            printf("(%3d, %3d) ", temp->vertexIndex, temp->edgeWeight);
+            printf("(%3d, %3d) ", temp->vertexIndex, temp->bondID);
             temp = temp->next;
         }
     }
 }
 
+void deleteGraph(AdjacencyList* graph){
+    if(graph == NULL)
+        return;
+
+    for(int i = 0; i < graph->nodeCount; i++){
+        deleteLL(graph->arr[i].next);
+    }
+
+    free(graph->arr);
+    free(graph);
+}
+
 // functions for linked list
-SllNode* createSllNode(int vi, int wt)
+// creates a new node of Linked List
+SllNode* createSllNode(int vi, int bondID)
 {
     SllNode* newNode = (SllNode*)malloc(sizeof(SllNode));
     newNode->vertexIndex = vi;
-    newNode->edgeWeight = wt;
+    newNode->bondID = bondID;
     newNode->next = NULL;
     return newNode;
 }
 
-SllNode* addSllNodeAfterGivenNode(SllNode* head, int vi, int wt)
+// Function to add new node to the beginning of the Linked List
+SllNode* addNodeBegin(SllNode* head, int vi, int bondID)
 {
-    if(head == NULL)
-        return NULL;
-    
-    SllNode* newNode = createSllNode(vi, wt);
-    newNode->next = head->next;
-    head->next = newNode;
-    return head;
-}
-
-SllNode* addNodeBegin(SllNode* head, int vi, int wt)
-{
-    SllNode* newNode = createSllNode(vi, wt);
+    SllNode* newNode = createSllNode(vi, bondID);
     newNode->next = head;
     return newNode;
+}
+
+// Deletes a Linked List
+void deleteLL(SllNode* head){
+    SllNode* temp, *next;
+    temp = head;
+    while(temp != NULL){
+        next = temp->next;
+        free(temp);
+        temp = next;
+    }
 }
