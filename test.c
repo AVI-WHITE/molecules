@@ -3,19 +3,19 @@
 
 int main(){
     Molecule* benzene = createNewMolecule();
-    addAtom(benzene, "C");
-    addAtom(benzene, "C");
-    addAtom(benzene, "C");
-    addAtom(benzene, "C");
-    addAtom(benzene, "C");
-    addAtom(benzene, "C");
+    addAtom(benzene, "C", 0);
+    addAtom(benzene, "C", 0);
+    addAtom(benzene, "C", 0);
+    addAtom(benzene, "C", 0);
+    addAtom(benzene, "C", 0);
+    addAtom(benzene, "C", 0);
 
-    addAtom(benzene, "H");
-    addAtom(benzene, "H");
-    addAtom(benzene, "H");
-    addAtom(benzene, "H");
-    addAtom(benzene, "H");
-    addAtom(benzene, "H");
+    addAtom(benzene, "H", 0);
+    addAtom(benzene, "H", 0);
+    addAtom(benzene, "H", 0);
+    addAtom(benzene, "H", 0);
+    addAtom(benzene, "H", 0);
+    addAtom(benzene, "H", 0);
 
     addBond(benzene, 0, 1, DOUBLE_BOND, COVALENT_BOND);
     addBond(benzene, 1, 2, SINGLE_BOND, COVALENT_BOND);
@@ -37,8 +37,8 @@ int main(){
 
     Molecule* salt = createNewMolecule();
 
-    addAtom(salt, "Na");
-    addAtom(salt, "Cl");
+    addAtom(salt, "Na", 1);
+    addAtom(salt, "Cl", -1);
     addBond(salt, 0, 1, 1, IONIC_BOND);
 
     printf("\n\nPrinting structure of common salt NaCl");
@@ -48,16 +48,16 @@ int main(){
     printf("\n\n--- Building Na2SO4 (Sodium Sulfate) ---\n");
     Molecule* na2so4 = createNewMolecule();
 
-    addAtom(na2so4, "S");  
+    addAtom(na2so4, "S", 0);  
     
-    addAtom(na2so4, "O");  
-    addAtom(na2so4, "O");  
+    addAtom(na2so4, "O", 0);  
+    addAtom(na2so4, "O", 0);  
     
-    addAtom(na2so4, "O");  
-    addAtom(na2so4, "O");  
+    addAtom(na2so4, "O", -1);  
+    addAtom(na2so4, "O", -1);  
     
-    addAtom(na2so4, "Na"); 
-    addAtom(na2so4, "Na"); 
+    addAtom(na2so4, "Na", 1); 
+    addAtom(na2so4, "Na", 1); 
 
 
     addBond(na2so4, 0, 1, DOUBLE_BOND, COVALENT_BOND); 
