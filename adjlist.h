@@ -1,3 +1,5 @@
+#pragma once
+
 #include<stdio.h>
 #include<stdlib.h>
 #define SPARE 5
@@ -11,7 +13,7 @@ struct LinkNode
 };
 typedef struct LinkNode SllNode;
 
-typedef struct AdjacencyList{
+typedef struct AdjacencyList{ 
 
     // array of SllNodes
     SllNode* arr;
@@ -31,7 +33,7 @@ SllNode* addNodeBegin(SllNode* head, int vi, int bi);
 SllNode* createSllNode(int vi, int bi);
 void deleteLL(SllNode* head);
   
-// type = 1 for undirected graphs and 0 for directed graphs
+
 AdjacencyList* createNewAdjacencyList(int numVertices){
     AdjacencyList* graph = (AdjacencyList *)malloc(sizeof(AdjacencyList));
 
