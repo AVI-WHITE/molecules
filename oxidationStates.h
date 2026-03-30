@@ -1,5 +1,8 @@
+#pragma once
+
 #include<stdio.h>
 #include<stdbool.h>
+#include"string.h"
 #include"molecule.h"
 
 int getENOrderIndex(char atom[]){
@@ -89,4 +92,13 @@ int* calculateOxidationStates(Molecule* mol){
 
     free(isVisited);
     return oxidationStates;
+}
+
+// helper function to print the array of Oxidation states of the molecule
+void printOxidationStatesArray(Molecule* mol, int* oxStates){
+    printf("\nOxidations states");
+    for(int i=0; i < mol->graph->nodeCount; i++){
+        if(strcmp(mol->atoms[i].element, "H"))
+            printf("\n%s(%d)\toxidation state : %d", mol->atoms[i].element, i, oxStates[i]);
+    }
 }
