@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include"molecule.h"
 #include"longestChain.h"
+#include"reaction.h"
+
 
 int main(){
 
@@ -80,6 +82,25 @@ int main(){
     printf("\nLongest Carbon Chain Length (Na2SO4): %d\n", longest);
 
     deleteMolecule(na2so4);
+
+
+    Reaction* r = createReaction("Sample Reaction");
+
+// Step 1: Create molecules
+    Molecule* m1 = createNewMolecule();
+    addAtom(m1, "C", 0);
+
+    Molecule* m2 = createNewMolecule();
+    addAtom(m2, "O", 0);
+
+    
+
+    // Step 2: ADD them to reaction
+    addReactant(r, m1);
+    addProduct(r, m2);
+
+    // Step 3: Print
+    printReaction(r);
 
     return 0;
 }
