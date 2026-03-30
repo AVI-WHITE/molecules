@@ -14,6 +14,7 @@
 typedef struct Atom{
     // int index;
     char element[4];
+    int charge;
 } Atom;
 
 typedef struct Bond{
@@ -42,7 +43,7 @@ Molecule* createNewMolecule(){
     return newm;
 }
 
-void addAtom(Molecule* mol, char atom[]){
+void addAtom(Molecule* mol, char atom[], int charge){
     if(mol->graph->capacity == mol->graph->nodeCount){
         Atom* newAtoms = (Atom *)realloc(mol->atoms, (mol->graph->capacity + SPARE) * sizeof(Atom));
         if(newAtoms == NULL){
@@ -53,6 +54,7 @@ void addAtom(Molecule* mol, char atom[]){
     }
     int index = addVertexAL(mol->graph);
     strncpy(mol->atoms[index].element, atom, 3);
+    mol->atoms[index].charge = charge;
     mol->atoms[index].element[3] = '\0';
 }
 
@@ -104,14 +106,22 @@ void printMolecule(Molecule* mol){
 
             bondID = temp->bondID;
 
+            // if bond not already printed
             if(!isVisited[bondID]){
-                printf("\n%s(%d) %s(%d)", mol->atoms[i].element, i, mol->atoms[temp->vertexIndex].element, temp->vertexIndex);
-
-                if(mol->bonds[bondID].bondType == COVALENT_BOND)
-                    printf("\tCovalent Bond (Bond order = %d)", mol->bonds[bondID].bondOrder);
-                else
-                    printf("\tIonic Bond (%d)", mol->bonds[bondID].bondOrder);
                 
+                if(mol->bonds[bondID].bondType == COVALENT_BOND){
+                    printf("\n%s(%d) %s(%d)", mol->atoms[i].element, i, mol->atoms[temp->vertexIndex].element, temp->vertexIndex);
+                    printf("\tCovalent Bond (Bond order = %d)", mol->bonds[bondID].bondOrder);
+                }
+
+                // if ionic bond
+                else{
+                    printf("\n%s(%d)(charge = %d) ", mol->atoms[i].element, i, mol->atoms[i].charge);
+                    printf("%s(%d)(charge = %d)", mol->atoms[temp->vertexIndex].element, temp->vertexIndex, mol->atoms[temp->vertexIndex].charge);
+                    printf("\tIonic Bond (%d)", mol->bonds[bondID].bondOrder);
+                }
+                
+                // marking the bond as visited
                 isVisited[bondID] = true;
             }
 
