@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include"molecule.h"
-#include"longestChain.h"
+// #include"longestChain.h"
+#include"operationsOnMolecules.h"
 
 int main(){
 
@@ -32,30 +33,14 @@ int main(){
     printMolecule(benzene);
 
     int longest = findLongestCarbonChain(benzene);
-    printf("\nLongest Carbon Chain Length (Benzene): %d\n", longest);
+    printf("\n\nLongest Carbon Chain Length (Benzene): %d", longest);
+    printf("\nIs benzene cyclic : %d", doesMoleculeContainCycle(benzene));
 
     deleteMolecule(benzene);
 
 
-    // ================= NaCl =================
-    printf("\n--- NaCl ---\n");
-
-    Molecule* salt = createNewMolecule();
-
-    addAtom(salt, "Na", 1);
-    addAtom(salt, "Cl", -1);
-    addBond(salt, 0, 1, 1, IONIC_BOND);
-
-    printMolecule(salt);
-
-    longest = findLongestCarbonChain(salt);
-    printf("\nLongest Carbon Chain Length (NaCl): %d\n", longest);
-
-    deleteMolecule(salt);
-
-
     // ================= Na2SO4 =================
-    printf("\n--- Na2SO4 ---\n");
+    printf("\n\n--- Na2SO4 ---\n");
 
     Molecule* na2so4 = createNewMolecule();
 
@@ -77,9 +62,117 @@ int main(){
     printMolecule(na2so4);
 
     longest = findLongestCarbonChain(na2so4);
-    printf("\nLongest Carbon Chain Length (Na2SO4): %d\n", longest);
+    printf("\n\nLongest Carbon Chain Length (Na2SO4): %d", longest);
+    printf("\nMolecular weight : %lf g/mol\n", molecularWeight(na2so4));
+    int* oxsNa2SO4 = calculateOxidationStates(na2so4);
+    printOxidationStatesArray(na2so4, oxsNa2SO4);
 
     deleteMolecule(na2so4);
+    free(oxsNa2SO4);
+
+    
+    
+    // ================= Isobutane =================
+    Molecule* isobutane = createNewMolecule();
+    printf("\n\n--- Isobutane ---\n");
+
+    addAtom(isobutane, "C", 0); // 0 (Central)
+    addAtom(isobutane, "C", 0); // 1 (Branch)
+    addAtom(isobutane, "C", 0); // 2 (Branch)
+    addAtom(isobutane, "C", 0); // 3 (Branch)
+    
+    // Hydrogens (Indices 4 to 13)
+    for(int i = 0; i < 10; i++) {
+        addAtom(isobutane, "H", 0); 
+    }
+    
+    // Carbon-Carbon Bonds
+    addBond(isobutane, 0, 1, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 0, 2, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 0, 3, SINGLE_BOND, COVALENT_BOND);
+    
+    // Carbon-Hydrogen Bonds
+    addBond(isobutane, 0, 4, SINGLE_BOND, COVALENT_BOND); // Central C gets 1 H
+    
+    addBond(isobutane, 1, 5, SINGLE_BOND, COVALENT_BOND); // Branch 1 gets 3 H
+    addBond(isobutane, 1, 6, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 1, 7, SINGLE_BOND, COVALENT_BOND);
+    
+    addBond(isobutane, 2, 8, SINGLE_BOND, COVALENT_BOND); // Branch 2 gets 3 H
+    addBond(isobutane, 2, 9, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 2, 10, SINGLE_BOND, COVALENT_BOND);
+    
+    addBond(isobutane, 3, 11, SINGLE_BOND, COVALENT_BOND); // Branch 3 gets 3 H
+    addBond(isobutane, 3, 12, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 3, 13, SINGLE_BOND, COVALENT_BOND);
+
+    printf("\nIs isobutane cyclic : %d", doesMoleculeContainCycle(isobutane));
+    
+    printf("\nLength of longest carbon chain : %d", findLongestCarbonChain(isobutane));
+    
+    printf("\nMolecular weight : %lf g/mol\n", molecularWeight(isobutane));
+    
+    int* oxsIsobutane = calculateOxidationStates(isobutane);
+    printOxidationStatesArray(isobutane, oxsIsobutane);
+    
+    free(oxsIsobutane);
+    oxsIsobutane = NULL;
+    deleteMolecule(isobutane);
+
+
+
+    // ================= Naphthalene =================
+    Molecule* naphthalene = createNewMolecule();
+    printf("\n\n--- Naphthalene ---\n");
+
+    
+    // Carbons (Indices 0 to 9)
+    for(int i = 0; i < 10; i++) {
+        addAtom(naphthalene, "C", 0); 
+    }
+    
+    // Hydrogens (Indices 10 to 17)
+    for(int i = 0; i < 8; i++) {
+        addAtom(naphthalene, "H", 0); 
+    }
+    
+    // Carbon Skeleton
+    addBond(naphthalene, 0, 1, DOUBLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 1, 2, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 2, 3, DOUBLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 3, 4, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 4, 9, DOUBLE_BOND, COVALENT_BOND); // Bridge
+    addBond(naphthalene, 9, 0, SINGLE_BOND, COVALENT_BOND);
+    
+    addBond(naphthalene, 4, 5, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 5, 6, DOUBLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 6, 7, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 7, 8, DOUBLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 8, 9, SINGLE_BOND, COVALENT_BOND); // Bridge
+    
+    // Carbon-Hydrogen Bonds (Bridgehead carbons 4 and 9 get NO hydrogens)
+    addBond(naphthalene, 0, 10, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 1, 11, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 2, 12, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 3, 13, SINGLE_BOND, COVALENT_BOND);
+    
+    addBond(naphthalene, 5, 14, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 6, 15, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 7, 16, SINGLE_BOND, COVALENT_BOND);
+    addBond(naphthalene, 8, 17, SINGLE_BOND, COVALENT_BOND);
+
+    printf("\nIs naphthalene cyclic : %d", doesMoleculeContainCycle(naphthalene));
+    
+    printf("\nLength of longest carbon chain : %d", findLongestCarbonChain(naphthalene));
+    
+    printf("\nMolecular weight : %lf g/mol\n", molecularWeight(naphthalene));
+    
+    int* oxsNaphthalene = calculateOxidationStates(naphthalene);
+    printOxidationStatesArray(naphthalene, oxsNaphthalene);
+    
+    free(oxsNaphthalene);
+    oxsIsobutane = NULL;
+    deleteMolecule(naphthalene);
 
     return 0;
 }
