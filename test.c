@@ -59,7 +59,6 @@ int main(){
     addAtom(na2so4, "Na"); 
     addAtom(na2so4, "Na"); 
 
-
     addBond(na2so4, 0, 1, DOUBLE_BOND, COVALENT_BOND); 
     addBond(na2so4, 0, 2, DOUBLE_BOND, COVALENT_BOND); 
     
