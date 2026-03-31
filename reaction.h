@@ -45,27 +45,44 @@ static void addProduct(Reaction* r, Molecule* m) {
     }
 }
 
-
-// Print Reaction (simple format)
 static void printReaction(Reaction* r) {
     printf("\n=== Reaction: %s ===\n", r->name);
 
-    printf("Reactants:\n");
+    // Reactants
     for(int i = 0; i < r->reactantCount; i++) {
+        printf("[R%d]\n", i+1);
         printMolecule(r->reactants[i]);
-        printf("\n");
+        if(i != r->reactantCount - 1){
+            printf(" + ");
+        }
     }
 
-    printf("-----> Products ----->\n");
+    printf("\n--------->\n");
 
+    // Products
     for(int i = 0; i < r->productCount; i++) {
+        printf("[P%d]\n", i+1);
         printMolecule(r->products[i]);
-        printf("\n");
+        if(i != r->productCount - 1)
+            printf(" + ");
     }
+
+    printf("\n========================\n");
 }
 
-
-// Delete Reaction
 static void deleteReaction(Reaction* r) {
+    if(r == NULL) return;
+
+    // free reactants
+    for(int i = 0; i < r->reactantCount; i++) {
+        deleteMolecule(r->reactants[i]);
+    }
+
+    // free products
+    for(int i = 0; i < r->productCount; i++) {
+        deleteMolecule(r->products[i]);
+    }
+
     free(r);
 }
+
