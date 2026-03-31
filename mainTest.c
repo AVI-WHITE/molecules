@@ -373,16 +373,17 @@ void part4_reaction() {
 /* ============================================================
    PART 5 : NEW DSA ADDITIONS
    ============================================================ */
-void part5_dsa() {
-    banner("PART 5 : New DSA Features (dfsTraversal.h)");
+void part5_dfs() {
+    banner("PART 5 : DFS + Molecule Analysis");
 
-    /* helper: build ethanol */
+    /* -------- ETHANOL -------- */
     Molecule* ethanol = createNewMolecule();
     addAtom(ethanol, "C", 0); addAtom(ethanol, "C", 0);
     addAtom(ethanol, "O", 0);
     addAtom(ethanol, "H", 0); addAtom(ethanol, "H", 0);
     addAtom(ethanol, "H", 0); addAtom(ethanol, "H", 0);
     addAtom(ethanol, "H", 0); addAtom(ethanol, "H", 0);
+
     addBond(ethanol, 0, 1, SINGLE_BOND, COVALENT_BOND);
     addBond(ethanol, 1, 2, SINGLE_BOND, COVALENT_BOND);
     addBond(ethanol, 2, 8, SINGLE_BOND, COVALENT_BOND);
@@ -392,72 +393,77 @@ void part5_dsa() {
     addBond(ethanol, 1, 6, SINGLE_BOND, COVALENT_BOND);
     addBond(ethanol, 1, 7, SINGLE_BOND, COVALENT_BOND);
 
-    /* helper: build benzene */
+    /* -------- BENZENE -------- */
     Molecule* benzene = createNewMolecule();
     for (int i = 0; i < 6; i++) addAtom(benzene, "C", 0);
     for (int i = 0; i < 6; i++) addAtom(benzene, "H", 0);
+
     addBond(benzene, 0, 1, DOUBLE_BOND, COVALENT_BOND);
     addBond(benzene, 1, 2, SINGLE_BOND,  COVALENT_BOND);
     addBond(benzene, 2, 3, DOUBLE_BOND, COVALENT_BOND);
     addBond(benzene, 3, 4, SINGLE_BOND,  COVALENT_BOND);
     addBond(benzene, 4, 5, DOUBLE_BOND, COVALENT_BOND);
     addBond(benzene, 5, 0, SINGLE_BOND,  COVALENT_BOND);
+
     for (int i = 0; i < 6; i++)
         addBond(benzene, i, i + 6, SINGLE_BOND, COVALENT_BOND);
 
-    /* helper: build isobutane */
+    /* -------- ISOBUTANE -------- */
     Molecule* isobutane = createNewMolecule();
     addAtom(isobutane, "C", 0); addAtom(isobutane, "C", 0);
     addAtom(isobutane, "C", 0); addAtom(isobutane, "C", 0);
+
     for (int i = 0; i < 10; i++) addAtom(isobutane, "H", 0);
+
     addBond(isobutane, 0, 1, SINGLE_BOND, COVALENT_BOND);
     addBond(isobutane, 0, 2, SINGLE_BOND, COVALENT_BOND);
     addBond(isobutane, 0, 3, SINGLE_BOND, COVALENT_BOND);
-    addBond(isobutane, 0, 4,  SINGLE_BOND, COVALENT_BOND);
-    addBond(isobutane, 1, 5,  SINGLE_BOND, COVALENT_BOND);
-    addBond(isobutane, 1, 6,  SINGLE_BOND, COVALENT_BOND);
-    addBond(isobutane, 1, 7,  SINGLE_BOND, COVALENT_BOND);
-    addBond(isobutane, 2, 8,  SINGLE_BOND, COVALENT_BOND);
-    addBond(isobutane, 2, 9,  SINGLE_BOND, COVALENT_BOND);
+
+    addBond(isobutane, 0, 4, SINGLE_BOND, COVALENT_BOND);
+
+    addBond(isobutane, 1, 5, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 1, 6, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 1, 7, SINGLE_BOND, COVALENT_BOND);
+
+    addBond(isobutane, 2, 8, SINGLE_BOND, COVALENT_BOND);
+    addBond(isobutane, 2, 9, SINGLE_BOND, COVALENT_BOND);
     addBond(isobutane, 2, 10, SINGLE_BOND, COVALENT_BOND);
+
     addBond(isobutane, 3, 11, SINGLE_BOND, COVALENT_BOND);
     addBond(isobutane, 3, 12, SINGLE_BOND, COVALENT_BOND);
     addBond(isobutane, 3, 13, SINGLE_BOND, COVALENT_BOND);
 
-    /* 5A — Molecular formula */
-    subbanner("5A: Molecular Formula");
+    /* -------- OUTPUT -------- */
+
+    subbanner("Molecular Formula");
     printMolecularFormula(ethanol);
     printMolecularFormula(benzene);
     printMolecularFormula(isobutane);
 
-    /* 5B — Connectivity check */
-    subbanner("5B: Connectivity Check (BFS)");
+    subbanner("Connectivity Check");
     checkConnectivity(ethanol);
     checkConnectivity(benzene);
     checkConnectivity(isobutane);
 
-    /* 5C — Atom degrees */
-    subbanner("5C: Atom Degrees");
+    subbanner("Atom Degrees");
     printf("\nEthanol:\n");   printAtomDegrees(ethanol);
     printf("\nBenzene:\n");   printAtomDegrees(benzene);
     printf("\nIsobutane:\n"); printAtomDegrees(isobutane);
 
-    /* 5D — Iterative DFS with manual stack */
-    subbanner("5D: Iterative DFS — Manual Stack (no recursion)");
-    printf("\n>> Ethanol DFS:");
+    subbanner("DFS Traversal");
+    printf("\n>> Ethanol DFS:\n");
     dfsIterative(ethanol, 0);
 
-    printf("\n>> Benzene DFS:");
+    printf("\n>> Benzene DFS:\n");
     dfsIterative(benzene, 0);
 
-    printf("\n>> Isobutane DFS:");
+    printf("\n>> Isobutane DFS:\n");
     dfsIterative(isobutane, 0);
 
     deleteMolecule(ethanol);
     deleteMolecule(benzene);
     deleteMolecule(isobutane);
 }
-
 /* ============================================================
    MAIN
    ============================================================ */
@@ -474,7 +480,7 @@ int main() {
     part2_functional_groups();
     part3_aromatic();
     part4_reaction();
-    part5_dsa();
+    part5_dfs();
 
     printf("\n");
     printf("############################################################\n");
