@@ -5,7 +5,7 @@
 #include "FGdetection.h"
 // target is taking two corresponding array by 1-0 logic print name of fg in priorty which are present
 void priority(Molecule *mol){
-// priority order: COOH > CHO > CN > OH > NO2
+// priority order: COOH > CHO > OH > CONH2 > CO
     int fg[5] = {0};
 
     fg[0] = isCarboxylic(mol);
