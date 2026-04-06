@@ -184,7 +184,7 @@ bool isKetone(Molecule* mol){
             }
             // check C-H
             if(strcmp(mol->atoms[j].element, "C") == 0 && mol->bonds[temp->bondID].bondOrder == SINGLE_BOND){ // and other two bonds must be connected with carbon to ensure ketone
-                hasC = 2;
+                hasC++;
             }
 
             temp = temp->next;
