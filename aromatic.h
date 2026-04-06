@@ -2,12 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "molecule.h"
+#include "cycleDetection.h"
 
 // cycle detection for aromatic compounds
 // dfsHelperForCycle and doesMoleculeContainCycle defined in cycleDetection.h
-int dfsHelperForCycle(AdjacencyList* graph, int start, bool* isVisited, int parent);
-int doesMoleculeContainCycle(Molecule* mol);
-
 
 // check aromatic compounds here
 bool checkAromatic(Molecule* mol){
