@@ -35,8 +35,21 @@ int doesMoleculeContainCycle(Molecule* mol){
         return 0;
     bool* isVisited = (bool *)calloc(mol->graph->nodeCount, sizeof(bool));
 
-    int res = dfsHelperForCycle(mol->graph, 0, isVisited, -1);
-    free(isVisited);
+   for(int i = 0; i < mol->graph->nodeCount; i++){
+         if(!isVisited[i]){
+            if(dfsHelperForCycle(mol->graph, i, isVisited, -1)){
+                free(isVisited);
+                return 1;
+            }
+        }
+    }
 
-    return res;
+    free(isVisited);
+    return 0;
 }
+
+//     int res = dfsHelperForCycle(mol->graph, 0, isVisited, -1);
+//     free(isVisited);
+
+//     return res;
+// }
